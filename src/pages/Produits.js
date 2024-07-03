@@ -10,7 +10,7 @@ export default function Produits() {
  const [nom, setNom] = useState('');
  const [prix, setPrix] = useState('');
  const [description, setDescription] = useState('');
- const [photo, setPhoto] = useState('');
+ const [photo, setPhoto] = useState(null);
  const [categorieId, setCategorieId] = useState('');
  const [quantite, setQuantite] = useState('');
  const [marque, setMarque] = useState('');
@@ -20,7 +20,6 @@ export default function Produits() {
     const data = await axios.get('http://localhost:5000/api/produits');
     console.log(data.data)
     setProducts(data.data.produits);
-    console.log(typeof products);
   };
 
   const fetchCategories = async () => {
@@ -35,21 +34,20 @@ export default function Produits() {
     fetchCategories();
   }, []);
 
-
-
   const handleClose = (modal) => {
     if (modal === 'add') setShowAdd(false);
   };
 
   const handleShow = (modal, item) => {
     setCurrentItem(item);
-    console.log('Modal', modal)
+    // console.log('Modal', modal)
     if (modal === 'add') setShowAdd(true);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    console.log(photo);
     try {
       const response = await axios.post('http://localhost:5000/api/produits', { nom,prix, quantite, marque, condition, description, photo, categorieId });
 
@@ -62,7 +60,6 @@ export default function Produits() {
       setDescription('');
       setPhoto('');
       setCategorieId('');
-
       fetchProduits();
       handleClose('add');
     } catch (error) {
@@ -71,6 +68,7 @@ export default function Produits() {
   };
 
   const handlePhotoChange = (e) => {
+    console.log(e.target.files[0]);
     setPhoto(e.target.files[0]);
   }
 
